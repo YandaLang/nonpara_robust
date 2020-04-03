@@ -1,0 +1,27 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Apr  3 16:48:34 2020
+
+@author: yanda
+"""
+""" 
+An estimate of the scale parameter taustar, can be used in mood's median 
+or standard error of the intercept in rank-based regression.
+    
+""" 
+ 
+import pandas as pd
+import numpy as np
+import scipy.stats as st
+import math
+
+def taustar (dat, p, conf=0.95):
+    n = len(dat)
+    zc = st.norm.ppf([(1+conf)/2])
+    c1 = math.floor(0.5*n-0.5*math.sqrt(n)*zc-0.5)
+    if c1 < 0:
+        c1 = 0
+    dats = sorted(dat)
+    z = dats[n-c1-1]-dats[c1]       
+    return math.sqrt(n/(n-p-1))*math.sqrt(n)*z/(2*zc)
